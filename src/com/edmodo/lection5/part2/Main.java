@@ -7,7 +7,7 @@ import static com.edmodo.lection5.part2.ATM.restMoney;
 /**
  * Created by pc on 28.11.2016.
  */
-public class Main {
+class Main {
 
     public static void main(String[] args) throws NoMoneyOnCardException {
         boolean terminalEnd = false;

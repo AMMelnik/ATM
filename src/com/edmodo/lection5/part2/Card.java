@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 /**
  * Created by pc on 28.11.2016.
  */
-public class Card {
+class Card {
     ArrayList<String> cardNumbersList = new ArrayList<>();
     ArrayList<Integer> cardRestOfMoneyList = new ArrayList<>();
 

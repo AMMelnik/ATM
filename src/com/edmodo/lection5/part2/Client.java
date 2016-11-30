@@ -8,11 +8,12 @@ import java.util.regex.Pattern;
 /**
  * Created by pc on 28.11.2016.
  */
-public class Client {
+class Client {
 
     ArrayList<String> clientsLoginList = new ArrayList<>();
     ArrayList<String> clientsPinList = new ArrayList<>();
     String login;
+
 
 
     String enterLogin() {

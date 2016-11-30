@@ -1,22 +1,24 @@
 package com.edmodo.lection5.part2;
 
-
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 /**
  * Created by pc on 28.11.2016.
  */
-public class ATM implements Terminal {
+class ATM implements Terminal {
     static int restMoney = 430;
     int loginIndex;
     Card card = new Card();
     Client client = new Client();
+    Account acc = new Account();
 
     void authorization() throws NoMoneyOnCardException {
         loginIndex = client.checkValidLogin(client.enterLogin());
         if (pinConfirmation(loginIndex)) {
             System.out.println("\u001b[34;m Welcome, " + client.getClientName(loginIndex) + "!\n");
-            menu();
+            menu1Level();
         }
     }
 
@@ -61,16 +63,49 @@ public class ATM implements Terminal {
         return isCorrectLogon;
     }
 
-    void menu() throws NoMoneyOnCardException {
+    void menu1Level() {
         System.out.println("\u001b[34;m Какую операцию Вы хотите совершить?\n");
-        System.out.println("\u001b[32;m (1) Пополнить счет\n" + " (2) Снять наличные\n" + " (3) Запросить баланс\n"
-                + " (4) Добавить карту\n" + " (5) Удалить карту\n" + " (6) Удалить аккаунт\n" + " (7) Выйти\n");
+        System.out.println("\u001b[32;m (1) Добавить карту\n" + " (2) Удалить карту\n" + " (3) Удалить аккаунт\n"
+                + " (4) Выбрать карту\n" + " (5) Выйти\n");
         Scanner scMenu = new Scanner(System.in);
         String menuChoose = scMenu.nextLine();
         switch (menuChoose) {
             case "1":
                 pinConfirmation(loginIndex);
-                refillAccount();
+                createCard();
+                break;
+            case "2":
+                pinConfirmation(loginIndex);
+                deleteCard();
+                break;
+            case "3":
+                pinConfirmation(loginIndex);
+                deleteClient();
+                break;
+            case "4":
+                pinConfirmation(loginIndex);
+                break;
+            case "5":
+                break;
+            default:
+                System.out.println("\u001b[34;m Пожалуйста, выберите нужное действие (1 - 5)\n");
+                menu2Level();
+                break;
+        }
+    }
+
+    void menu2Level() throws NoMoneyOnCardException {
+      //  if (card.cardNumbersList.)
+            System.out.println("\u001b[34;m Какую операцию Вы хотите совершить?\n");
+        System.out.println("\u001b[32;m (1) Пополнить счет\n" + " (2) Снять наличные\n" + " (3) Запросить баланс\n"
+                 + " (4) Выйти\n");
+        Scanner scMenu = new Scanner(System.in);
+        String menuChoose = scMenu.nextLine();
+        switch (menuChoose) {
+            case "1":
+                System.out.println(acc.toString());
+                pinConfirmation(loginIndex);
+                addMoney();
                 break;
             case "2":
                 pinConfirmation(loginIndex);
@@ -80,23 +115,11 @@ public class ATM implements Terminal {
                 pinConfirmation(loginIndex);
                 checkAccountStatus();
                 break;
-            case "4":
-                pinConfirmation(loginIndex);
-                createCard();
-                break;
-            case "5":
-                pinConfirmation(loginIndex);
-                deleteCard();
-                break;
-            case "6":
-                pinConfirmation(loginIndex);
-                deleteClient();
-                break;
             case "7":
                 break;
             default:
                 System.out.println("\u001b[34;m Пожалуйста, выберите нужное действие (1 - 7)\n");
-                menu();
+                menu2Level();
                 break;
         }
     }
@@ -107,7 +130,7 @@ public class ATM implements Terminal {
     }
 
     @Override
-    public int refillAccount() {
+    public int addMoney() {
         return 0;
     }
 
@@ -126,9 +149,12 @@ public class ATM implements Terminal {
     public void createClient() {
         boolean isTruePin = false;
         boolean isTrueLogin = false;
+        acc.createAccount();
         while (!isTrueLogin) {
             try {
-                client.checkLoginCreating(client.enterLogin());
+                String login = client.enterLogin();
+                client.checkLoginCreating(login);
+                acc.setAccount(login);
                 isTrueLogin = true;
             } catch (ClientDuplicatedException clDe) {
                 System.out.println(clDe.getMessage());
@@ -137,7 +163,9 @@ public class ATM implements Terminal {
         }
         while (!isTruePin) {
             try {
-                client.addPinToClient(client.enterPin());
+                String pin = client.enterPin();
+                client.addPinToClient(pin);
+                acc.setAccount(pin);
                 isTruePin = true;
             } catch (IncorrectPinException iPe) {
                 System.out.println(iPe.getMessage());
@@ -174,4 +202,6 @@ public class ATM implements Terminal {
     public void deleteCard() {
 
     }
+
+
 }
