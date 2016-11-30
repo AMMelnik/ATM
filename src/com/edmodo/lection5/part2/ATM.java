@@ -8,13 +8,13 @@ import java.util.Scanner;
  */
 public class ATM implements Terminal {
     static int restMoney = 430;
+    int loginIndex;
     Card card = new Card();
     Client client = new Client();
-    int loginIndex;
 
     void authorization() throws NoMoneyOnCardException {
         loginIndex = client.checkValidLogin(client.enterLogin());
-        while(pinConfirmation(loginIndex)) {
+        if (pinConfirmation(loginIndex)) {
             System.out.println("\u001b[34;m Welcome, " + client.getClientName(loginIndex) + "!\n");
             menu();
         }
