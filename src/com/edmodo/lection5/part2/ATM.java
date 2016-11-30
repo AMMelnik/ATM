@@ -10,6 +10,7 @@ import java.util.Scanner;
 class ATM implements Terminal {
     static int restMoney = 430;
     int loginIndex;
+    String login, pin, cardNumber;
     Card card = new Card();
     Client client = new Client();
     Account acc = new Account();
@@ -17,7 +18,7 @@ class ATM implements Terminal {
     void authorization() throws NoMoneyOnCardException {
         loginIndex = client.checkValidLogin(client.enterLogin());
         if (pinConfirmation(loginIndex)) {
-            System.out.println("\u001b[34;m Welcome, " + client.getClientName(loginIndex) + "!\n");
+            System.out.println("\u001b[34;m Здравствуйте, " + client.getClientName(loginIndex) + "!\n");
             menu1Level();
         }
     }
@@ -63,86 +64,94 @@ class ATM implements Terminal {
         return isCorrectLogon;
     }
 
-    void menu1Level() {
-        System.out.println("\u001b[34;m Какую операцию Вы хотите совершить?\n");
-        System.out.println("\u001b[32;m (1) Добавить карту\n" + " (2) Удалить карту\n" + " (3) Удалить аккаунт\n"
-                + " (4) Выбрать карту\n" + " (5) Выйти\n");
-        Scanner scMenu = new Scanner(System.in);
-        String menuChoose = scMenu.nextLine();
-        switch (menuChoose) {
-            case "1":
-                pinConfirmation(loginIndex);
-                createCard();
-                break;
-            case "2":
-                pinConfirmation(loginIndex);
-                deleteCard();
-                break;
-            case "3":
-                pinConfirmation(loginIndex);
-                deleteClient();
-                break;
-            case "4":
-                pinConfirmation(loginIndex);
-                break;
-            case "5":
-                break;
-            default:
-                System.out.println("\u001b[34;m Пожалуйста, выберите нужное действие (1 - 5)\n");
-                menu2Level();
-                break;
-        }
-    }
-
-    void menu2Level() throws NoMoneyOnCardException {
-      //  if (card.cardNumbersList.)
+    void menu1Level() throws NoMoneyOnCardException {
+        boolean isChoiceEnd = false;
+        while (!isChoiceEnd) {
             System.out.println("\u001b[34;m Какую операцию Вы хотите совершить?\n");
-        System.out.println("\u001b[32;m (1) Пополнить счет\n" + " (2) Снять наличные\n" + " (3) Запросить баланс\n"
-                 + " (4) Выйти\n");
-        Scanner scMenu = new Scanner(System.in);
-        String menuChoose = scMenu.nextLine();
-        switch (menuChoose) {
-            case "1":
-                System.out.println(acc.toString());
-                pinConfirmation(loginIndex);
-                addMoney();
-                break;
-            case "2":
-                pinConfirmation(loginIndex);
-                getMoney();
-                break;
-            case "3":
-                pinConfirmation(loginIndex);
-                checkAccountStatus();
-                break;
-            case "7":
-                break;
-            default:
-                System.out.println("\u001b[34;m Пожалуйста, выберите нужное действие (1 - 7)\n");
-                menu2Level();
-                break;
+            System.out.println("\u001b[32;m (1) Добавить карту\n" + " (2) Удалить карту\n" + " (3) Удалить аккаунт\n"
+                    + " (4) Выбрать карту\n" + " (5) Выйти\n");
+            Scanner scMenu = new Scanner(System.in);
+            String menuChoose = scMenu.nextLine();
+            switch (menuChoose) {
+                case "1":
+                    pinConfirmation(loginIndex);
+                    createCard();
+                    System.out.println(acc.toString());
+                    break;
+                case "2":
+                    pinConfirmation(loginIndex);
+                    deleteCard();
+                    break;
+                case "3":
+                    pinConfirmation(loginIndex);
+                    deleteClient();
+                    break;
+                case "4":
+                    pinConfirmation(loginIndex);
+                    selectCard();
+                    break;
+                case "5":
+                    isChoiceEnd = true;
+                    break;
+                default:
+                    System.out.println("\u001b[34;m Пожалуйста, выберите нужное действие (1 - 5)\n");
+                    break;
+            }
+        }
+    }
+
+    void menu2Level(int cardIndex) throws NoMoneyOnCardException {
+        boolean isChoiceEnd = false;
+        while (!isChoiceEnd) {
+            System.out.println("\u001b[34;m Какую операцию Вы хотите совершить?\n");
+            System.out.println("\u001b[32;m (1) Пополнить счет\n" + " (2) Снять наличные\n" + " (3) Запросить баланс\n"
+                    + " (4) Выйти\n");
+            Scanner scMenu = new Scanner(System.in);
+            String menuChoose = scMenu.nextLine();
+            switch (menuChoose) {
+                case "1":
+                    System.out.println(acc.toString());
+                    pinConfirmation(loginIndex);
+                    addMoney();
+                    break;
+                case "2":
+                    pinConfirmation(loginIndex);
+                    getMoney();
+                    break;
+                case "3":
+                    pinConfirmation(loginIndex);
+                    checkAccountStatus();
+                    break;
+                case "4":
+                    isChoiceEnd = true;
+                    break;
+                default:
+                    System.out.println("\u001b[34;m Пожалуйста, выберите нужное действие (1 - 4)\n");
+                    break;
+            }
         }
     }
 
     @Override
-    public int checkAccountStatus() {
-        return 0;
+    public void checkAccountStatus() {
+        System.out.println("\u001b[34;m Баланс Вашей карты составляет " + acc.getCardBalance() + " рублей.\n");
     }
 
     @Override
-    public int addMoney() {
-        return 0;
+    public void addMoney() {
+        System.out.println("\u001b[34;m Пополнение на " + acc.setCardBalance(1000) + " рублей.\n");
     }
 
     @Override
-    public int getMoney() throws NoMoneyOnCardException {
-        int minusMoney = 1000;
+    public void getMoney() throws NoMoneyOnCardException {
+        System.out.println("\u001b[34;m Снятие наличных на " + acc.setCardBalance(-500) + " рублей.\n");
+    /*    int minusMoney = 1000;
         if (minusMoney > restMoney) {
             throw new NoMoneyOnCardException("\u001b[31;m Недостаточно средств на карте!", minusMoney);
         }
 
         restMoney = restMoney - minusMoney;
-        return restMoney;
+        return restMoney;*/
     }
 
     @Override
@@ -152,7 +161,7 @@ class ATM implements Terminal {
         acc.createAccount();
         while (!isTrueLogin) {
             try {
-                String login = client.enterLogin();
+                login = client.enterLogin();
                 client.checkLoginCreating(login);
                 acc.setAccount(login);
                 isTrueLogin = true;
@@ -163,7 +172,7 @@ class ATM implements Terminal {
         }
         while (!isTruePin) {
             try {
-                String pin = client.enterPin();
+                pin = client.enterPin();
                 client.addPinToClient(pin);
                 acc.setAccount(pin);
                 isTruePin = true;
@@ -184,7 +193,8 @@ class ATM implements Terminal {
         boolean isTrueCard = false;
         while (!isTrueCard) {
             try {
-                String cardNumber = card.setCardNumber();
+                cardNumber = card.setCardNumber();
+                acc.setAccount(cardNumber);
                 isTrueCard = true;
             } catch (IncorrectCardNumberException iCnE) {
                 System.out.println(iCnE.getMessage());
@@ -203,5 +213,16 @@ class ATM implements Terminal {
 
     }
 
-
+    void selectCard() throws NoMoneyOnCardException {
+        boolean isTrueCard = false;
+        while (!isTrueCard) {
+            acc.cardsViewer();
+            Scanner scWhichCard = new Scanner(System.in);
+            int whichCard = scWhichCard.nextInt();
+            if (whichCard > 1 || whichCard < acc.getSize() - 1) {
+                menu2Level(whichCard + 1);
+                isTrueCard = true;
+            }
+        }
+    }
 }
