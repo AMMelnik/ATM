@@ -1,16 +1,18 @@
 package com.edmodo.lection5.part2;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
  * Created by pc on 30.11.2016.
  */
 class Account {
-    int cardBalance = 0;
+    ArrayList<Integer> cardsBalance;
     LinkedList<String> account;
 
     void createAccount() {
         account = new LinkedList<>();
+        cardsBalance = new ArrayList<>();
     }
 
     void setAccount(String data) {
@@ -25,26 +27,34 @@ class Account {
     public String toString() {
         return account.toString();
     }
+
     int getSize() {
-       return account.size();
+        return account.size();
     }
 
-    int cardsViewer() {
-        int numberPointStart = 2;
-        int numberPointEnd = numberPointStart;
+    void cardsViewer() {
         System.out.println("\u001b[34;m Выберите карту для совершения операции: \n");
         for (int i = 2; i < account.size(); i++) {
-            numberPointEnd = i;
-            System.out.println("\u001b[32;m (" + (numberPointEnd - 1) + ") " + account.get(i) + "\n");
+            System.out.println("\u001b[32;m (" + (i - 1) + ") " + account.get(i) + "\n");
         }
-        return numberPointStart & numberPointEnd;
+
     }
 
-    int getCardBalance() {
-        return cardBalance;
+    void setCardsBalanceSize() {
+        for (int i = 0; i < getSize() - 2; i++) {
+            cardsBalance.add(0);
+        }
     }
 
-    int setCardBalance(int money) {
-        return cardBalance += money;
+    int getCardBalance(int cardIndex) {
+        return cardsBalance.get(cardIndex);
+    }
+
+    int setCardBalance(int cardIndex, int money) {
+      /*  int balance = cardsBalance.get(cardIndex) + money;
+        return  balance;*/
+        int balance = cardsBalance.get(cardIndex);
+        cardsBalance.set(cardIndex, balance + money);
+        return cardsBalance.get(cardIndex);
     }
 }

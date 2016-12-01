@@ -6,11 +6,11 @@ package com.edmodo.lection5.part2;
  */
 interface Terminal {
 
-    void checkAccountStatus();
+    void checkAccountStatus(int cardIndex);
 
-    void addMoney();
+    void addMoney(int cardIndex);
 
-    void getMoney() throws NoMoneyOnCardException;
+    void getMoney(int cardIndex) throws NoMoneyOnCardException;
 
     void createClient();
 

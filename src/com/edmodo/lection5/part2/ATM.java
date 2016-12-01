@@ -112,15 +112,15 @@ class ATM implements Terminal {
                 case "1":
                     System.out.println(acc.toString());
                     pinConfirmation(loginIndex);
-                    addMoney();
+                    addMoney(cardIndex);
                     break;
                 case "2":
                     pinConfirmation(loginIndex);
-                    getMoney();
+                    getMoney(cardIndex);
                     break;
                 case "3":
                     pinConfirmation(loginIndex);
-                    checkAccountStatus();
+                    checkAccountStatus(cardIndex);
                     break;
                 case "4":
                     isChoiceEnd = true;
@@ -133,18 +133,18 @@ class ATM implements Terminal {
     }
 
     @Override
-    public void checkAccountStatus() {
-        System.out.println("\u001b[34;m Баланс Вашей карты составляет " + acc.getCardBalance() + " рублей.\n");
+    public void checkAccountStatus(int cardIndex) {
+        System.out.println("\u001b[34;m Баланс Вашей карты составляет " + acc.getCardBalance(cardIndex) + " рублей.\n");
     }
 
     @Override
-    public void addMoney() {
-        System.out.println("\u001b[34;m Пополнение на " + acc.setCardBalance(1000) + " рублей.\n");
+    public void addMoney(int cardIndex) {
+        System.out.println("\u001b[34;m Пополнение на " + acc.setCardBalance(cardIndex, 1000) + " рублей.\n");
     }
 
     @Override
-    public void getMoney() throws NoMoneyOnCardException {
-        System.out.println("\u001b[34;m Снятие наличных на " + acc.setCardBalance(-500) + " рублей.\n");
+    public void getMoney(int cardIndex) throws NoMoneyOnCardException {
+        System.out.println("\u001b[34;m Снятие наличных на " + acc.setCardBalance(cardIndex, -500) + " рублей.\n");
     /*    int minusMoney = 1000;
         if (minusMoney > restMoney) {
             throw new NoMoneyOnCardException("\u001b[31;m Недостаточно средств на карте!", minusMoney);
@@ -204,7 +204,7 @@ class ATM implements Terminal {
                 caDe.getDuplicatedNumber();
             }
 
-            int cardMoney = card.setCardMoney();
+            acc.setCardsBalanceSize();
         }
     }
 
@@ -220,7 +220,7 @@ class ATM implements Terminal {
             Scanner scWhichCard = new Scanner(System.in);
             int whichCard = scWhichCard.nextInt();
             if (whichCard > 1 || whichCard < acc.getSize() - 1) {
-                menu2Level(whichCard + 1);
+                menu2Level(whichCard - 1);
                 isTrueCard = true;
             }
         }
