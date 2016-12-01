@@ -1,7 +1,5 @@
 package com.edmodo.lection5.part2;
 
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.Scanner;
 
 /**
@@ -13,7 +11,7 @@ class ATM implements Terminal {
     String login, pin, cardNumber;
     Card card = new Card();
     Client client = new Client();
-    Account acc = new Account();
+    Account acc;
 
     void authorization() throws NoMoneyOnCardException {
         loginIndex = client.checkValidLogin(client.enterLogin());
@@ -158,6 +156,7 @@ class ATM implements Terminal {
     public void createClient() {
         boolean isTruePin = false;
         boolean isTrueLogin = false;
+        acc = new Account();
         acc.createAccount();
         while (!isTrueLogin) {
             try {

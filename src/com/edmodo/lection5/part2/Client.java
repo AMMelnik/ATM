@@ -9,11 +9,20 @@ import java.util.regex.Pattern;
  * Created by pc on 28.11.2016.
  */
 class Client {
+/*
+    private String name;
+    private String pin;
+    private ArrayList<String> cardNumbers;
+    private ArrayList<Integer> cardBalance;
+
+    */
+
+
+
 
     ArrayList<String> clientsLoginList = new ArrayList<>();
     ArrayList<String> clientsPinList = new ArrayList<>();
     String login;
-
 
 
     String enterLogin() {
@@ -32,9 +41,8 @@ class Client {
 
     int checkValidLogin(String login) {
         if (clientsLoginList.contains(login)) {
-           return clientsLoginList.indexOf(login);
-        }
-        else return -1;
+            return clientsLoginList.indexOf(login);
+        } else return -1;
     }
 
 
@@ -57,8 +65,7 @@ class Client {
     int checkValidPin(String pin) {
         if (clientsPinList.contains(pin)) {
             return clientsPinList.indexOf(pin);
-        }
-        else return -1;
+        } else return -1;
     }
 
     String getClientName(int index) {

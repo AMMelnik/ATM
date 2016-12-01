@@ -51,8 +51,6 @@ class Account {
     }
 
     int setCardBalance(int cardIndex, int money) {
-      /*  int balance = cardsBalance.get(cardIndex) + money;
-        return  balance;*/
         int balance = cardsBalance.get(cardIndex);
         cardsBalance.set(cardIndex, balance + money);
         return cardsBalance.get(cardIndex);
