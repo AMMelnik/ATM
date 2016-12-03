@@ -1,74 +1,59 @@
 package com.edmodo.lection5.part2;
 
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by pc on 28.11.2016.
  */
 class Client {
-/*
-    private String name;
+
+    private String login;
     private String pin;
-    private ArrayList<String> cardNumbers;
-    private ArrayList<Integer> cardBalance;
+    private ArrayList<String> cardNumbers = new ArrayList<String>();
+    private ArrayList<Integer> cardBalance = new ArrayList<Integer>();
 
-    */
-
-
-
-
-    ArrayList<String> clientsLoginList = new ArrayList<>();
-    ArrayList<String> clientsPinList = new ArrayList<>();
-    String login;
-
-
-    String enterLogin() {
-        System.out.println("\u001b[34;m Введите логин - имя клиента\n");
-        Scanner scLogin = new Scanner(System.in);
-        login = scLogin.nextLine();
+    String getLogin() {
         return login;
     }
 
-    void checkLoginCreating(String login) throws ClientDuplicatedException {
-        if (clientsLoginList.contains(login)) {
-            throw new ClientDuplicatedException("\u001b[31;m Вы указали занятый логин!", login);
-        }
-        clientsLoginList.add(login);
+    void setLogin(String login) {
+        this.login = login;
     }
 
-    int checkValidLogin(String login) {
-        if (clientsLoginList.contains(login)) {
-            return clientsLoginList.indexOf(login);
-        } else return -1;
-    }
-
-
-    String enterPin() throws IncorrectPinException {
-        System.out.println("\u001b[34;m Введите ПИН-код для доступа к аккаунту\n");
-        Scanner scPin = new Scanner(System.in);
-        String pin = scPin.nextLine();
-        Pattern pinPattern = Pattern.compile("\\d{4}");
-        Matcher pinMatcher = pinPattern.matcher(pin);
-        if (!pinMatcher.matches()) {
-            throw new IncorrectPinException("\u001b[31;m Вы ввели некорректный ПИН-код!");
-        }
+    String getPin() {
         return pin;
     }
 
-    void addPinToClient(String pin) {
-        clientsPinList.add(pin);
+    void setPin(String pin) {
+        this.pin = pin;
     }
 
-    int checkValidPin(String pin) {
-        if (clientsPinList.contains(pin)) {
-            return clientsPinList.indexOf(pin);
-        } else return -1;
+    String getCardNumber(int index) {
+        return cardNumbers.get(index);
     }
 
-    String getClientName(int index) {
-        return clientsLoginList.get(index);
+    ArrayList<String> getCardNumbers() {
+        return cardNumbers;
+    }
+
+    void setCardNumberWithZeroBalance(int index, String number) {
+        this.cardNumbers.add(index, number);
+        this.cardBalance.add(index, 0);
+    }
+
+    int getCardNumbersSize() {
+        return cardNumbers.size();
+    }
+
+    int getCardBalance(int index) {
+        return cardBalance.get(index);
+    }
+
+    ArrayList<Integer> getCardBalance() {
+        return cardBalance;
+    }
+
+    void setCardBalance(int index, int balance) {
+        this.cardBalance.set(index, balance);
     }
 }
