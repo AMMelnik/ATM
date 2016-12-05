@@ -1,5 +1,7 @@
 package com.edmodo.lection5.part2;
 
+import java.io.*;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -7,8 +9,8 @@ import java.util.Scanner;
  * Created by pc on 28.11.2016.
  */
 class ATM implements Terminal {
-    int loginIndex;
-    Account acc = new Account();
+    private int loginIndex;
+    private Account acc = new Account();
 
     void authorization() throws NoMoneyOnCardException {
         loginIndex = acc.checkValidLogin(acc.enterLogin());
@@ -18,7 +20,7 @@ class ATM implements Terminal {
         }
     }
 
-    boolean pinConfirmation(int index) throws NoMoneyOnCardException {
+    private boolean pinConfirmation(int index) throws NoMoneyOnCardException {
         loginIndex = index;
         int logonAttempt = 1;
         int maxLogon;
@@ -52,7 +54,7 @@ class ATM implements Terminal {
         return isCorrectLogon;
     }
 
-    void lockAccount() {
+    private void lockAccount() {
         System.out.println("\u001b[31;m Превышено ограничение по авторизации! Аккаунт временно заблокирован\n");
         Thread thread = new Thread();
         String dot = ".";
@@ -68,7 +70,7 @@ class ATM implements Terminal {
         System.out.println("\n");
     }
 
-    void menu1Level() throws NoMoneyOnCardException {
+    private void menu1Level() throws NoMoneyOnCardException {
         boolean isChoiceEnd = false;
         while (!isChoiceEnd) {
             System.out.println("\u001b[34;m Какое действие Вы хотите выполнить?\n");
@@ -85,6 +87,11 @@ class ATM implements Terminal {
                 case "2":
                     if (pinConfirmation(loginIndex)) {
                         deleteClient(loginIndex);
+                        try {
+                            serialAccount();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         isChoiceEnd = true;
                         break;
                     } else break;
@@ -94,6 +101,11 @@ class ATM implements Terminal {
                         break;
                     } else break;
                 case "4":
+                    try {
+                        serialAccount();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     isChoiceEnd = true;
                     break;
                 default:
@@ -103,7 +115,7 @@ class ATM implements Terminal {
         }
     }
 
-    void menu2Level(int cardIndex) throws NoMoneyOnCardException {
+    private void menu2Level(int cardIndex) throws NoMoneyOnCardException {
         boolean isChoiceEnd = false;
         while (!isChoiceEnd) {
             System.out.println("\u001b[34;m Какую операцию Вы хотите совершить?\n");
@@ -264,7 +276,7 @@ class ATM implements Terminal {
         System.out.println("\u001b[31;m Ваша карта была удалена!\n");
     }
 
-    void selectCard(int clientIndex) throws NoMoneyOnCardException {
+    private void selectCard(int clientIndex) throws NoMoneyOnCardException {
         boolean isTrueCard = false;
         while (!isTrueCard) {
             if (acc.cardsViewer(clientIndex) == 1) {
@@ -279,5 +291,23 @@ class ATM implements Terminal {
                 isTrueCard = true;
             }
         }
+    }
+
+    void serialAccount() throws IOException {
+        System.out.println("\u001b[32;m Сохранение.........");
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("C://Users/Public/serialAccount.txt"));
+        out.writeObject(acc.getAccount());
+        out.close();
+        System.out.println("\u001b[34;m Данные записаны!\n");
+    }
+
+    ATM deSerialAccount() throws IOException, ClassNotFoundException {
+        ATM dataATM = new ATM();
+        System.out.println("\u001b[32;m Данные считываются.........");
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream("C://Users/Public/serialAccount.txt"));
+        acc.setAccount((ArrayList<Client>) in.readObject());
+        in.close();
+        System.out.println("\u001b[34;m Данные считаны!\n");
+        return dataATM;
     }
 }

@@ -1,5 +1,6 @@
 package com.edmodo.lection5.part2;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -10,10 +11,17 @@ class Main {
     public static void main(String[] args) throws NoMoneyOnCardException {
         System.out.println("\u001b[34;m Добро пожаловать в Терминал!\n");
         ATM atm = new ATM();
+        try {
+            atm.deSerialAccount();
+        } catch (IOException e) {
+            System.out.println("\u001b[31;m Файл с данными аккаунтов будет создан по завершению работы\n");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         terminalMenu(atm);
     }
 
-    static void terminalMenu(ATM atm) throws NoMoneyOnCardException {
+    private static void terminalMenu(ATM atm) throws NoMoneyOnCardException {
         boolean terminalEnd = false;
         while (!terminalEnd) {
             System.out.println("\u001b[34;m Выберите действие:\n");
@@ -28,6 +36,11 @@ class Main {
                     atm.authorization();
                     break;
                 case "3":
+                    try {
+                        atm.serialAccount();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     System.out.println("\u001b[30;m Всего доброго!");
                     terminalEnd = true;
                     break;

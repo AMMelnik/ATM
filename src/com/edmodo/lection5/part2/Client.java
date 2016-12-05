@@ -1,16 +1,17 @@
 package com.edmodo.lection5.part2;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by pc on 28.11.2016.
  */
-class Client {
+class Client implements Serializable {
 
     private String login;
     private String pin;
-    private ArrayList<String> cardNumbers = new ArrayList<String>();
-    private ArrayList<Integer> cardBalance = new ArrayList<Integer>();
+    private ArrayList<String> cardNumbers = new ArrayList<>();
+    private ArrayList<Integer> cardBalance = new ArrayList<>();
 
     String getLogin() {
         return login;
