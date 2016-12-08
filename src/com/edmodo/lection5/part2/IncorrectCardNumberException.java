@@ -1,7 +1,5 @@
 package com.edmodo.lection5.part2;
 
-import static com.edmodo.lection5.part2.ATM.restMoney;
-
 /**
  * Created by pc on 28.11.2016.
  */

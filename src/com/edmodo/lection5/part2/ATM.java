@@ -12,7 +12,7 @@ class ATM implements Terminal {
     private int loginIndex;
     private Account acc = new Account();
 
-    void authorization() throws NoMoneyOnCardException {
+    void authorization() {
         loginIndex = acc.checkValidLogin(acc.enterLogin());
         if (pinConfirmation(loginIndex)) {
             System.out.println("\u001b[34;m Здравствуйте, " + acc.getClientName(loginIndex) + "!\n");
@@ -20,7 +20,7 @@ class ATM implements Terminal {
         }
     }
 
-    private boolean pinConfirmation(int index) throws NoMoneyOnCardException {
+    private boolean pinConfirmation(int index) {
         loginIndex = index;
         int logonAttempt = 1;
         int maxLogon;
@@ -70,7 +70,7 @@ class ATM implements Terminal {
         System.out.println("\n");
     }
 
-    private void menu1Level() throws NoMoneyOnCardException {
+    private void menu1Level() {
         boolean isChoiceEnd = false;
         while (!isChoiceEnd) {
             System.out.println("\u001b[34;m Какое действие Вы хотите выполнить?\n");
@@ -115,7 +115,7 @@ class ATM implements Terminal {
         }
     }
 
-    private void menu2Level(int cardIndex) throws NoMoneyOnCardException {
+    private void menu2Level(int cardIndex) {
         boolean isChoiceEnd = false;
         while (!isChoiceEnd) {
             System.out.println("\u001b[34;m Какую операцию Вы хотите совершить?\n");
@@ -276,7 +276,7 @@ class ATM implements Terminal {
         System.out.println("\u001b[31;m Ваша карта была удалена!\n");
     }
 
-    private void selectCard(int clientIndex) throws NoMoneyOnCardException {
+    private void selectCard(int clientIndex) {
         boolean isTrueCard = false;
         while (!isTrueCard) {
             if (acc.cardsViewer(clientIndex) == 1) {

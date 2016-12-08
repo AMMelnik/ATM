@@ -8,7 +8,7 @@ import java.util.Scanner;
  */
 class Main {
 
-    public static void main(String[] args) throws NoMoneyOnCardException {
+    public static void main(String[] args) {
         System.out.println("\u001b[34;m Добро пожаловать в Терминал!\n");
         ATM atm = new ATM();
         try {
@@ -21,7 +21,7 @@ class Main {
         terminalMenu(atm);
     }
 
-    private static void terminalMenu(ATM atm) throws NoMoneyOnCardException {
+    private static void terminalMenu(ATM atm) {
         boolean terminalEnd = false;
         while (!terminalEnd) {
             System.out.println("\u001b[34;m Выберите действие:\n");
