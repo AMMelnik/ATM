@@ -97,7 +97,11 @@ class ATM implements Terminal {
                     } else break;
                 case "3":
                     if (pinConfirmation(loginIndex)) {
-                        selectCard(loginIndex);
+                        try {
+                            selectCard(loginIndex);
+                        } catch (IncorrectCardChoiceException iCcE) {
+                            System.out.println(iCcE.getMessage());
+                        }
                         break;
                     } else break;
                 case "4":
@@ -276,7 +280,7 @@ class ATM implements Terminal {
         System.out.println("\u001b[31;m Ваша карта была удалена!\n");
     }
 
-    private void selectCard(int clientIndex) {
+    private void selectCard(int clientIndex) throws IncorrectCardChoiceException {
         boolean isTrueCard = false;
         while (!isTrueCard) {
             if (acc.cardsViewer(clientIndex) == 1) {
@@ -285,7 +289,7 @@ class ATM implements Terminal {
                 if (whichCard > 0 && whichCard <= acc.getCardsSize(clientIndex)) {
                     menu2Level(whichCard - 1);
                     isTrueCard = true;
-                }
+                } else throw new IncorrectCardChoiceException("\u001b[32;m Пожалуйста, выберите карту из списка!\n");
             } else {
                 System.out.println("\u001b[31;m У Вас еще нет карт!\n");
                 isTrueCard = true;
