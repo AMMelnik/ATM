@@ -108,6 +108,10 @@ class Account implements Serializable {
         return -1;
     }
 
+    String getCardNumber(int clientIndex, int cardIndex) {
+        return getAccount().get(clientIndex).getCardNumber(cardIndex);
+    }
+
     void setCardNumber(String number, int clientIndex) {
         if (getCardsSize(clientIndex) > 0) {
             getAccount().get(clientIndex).setCardNumberWithZeroBalance(getCardsSize(clientIndex), number);
