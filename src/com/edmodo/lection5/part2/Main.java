@@ -40,7 +40,7 @@ class Main {
                 case "3":
                     Increaser increaser = new Increaser();
                     Decreaser decreaser = new Decreaser();
-                    increaser.setPriority(Thread.MAX_PRIORITY);
+                    increaser.setPriority(Thread.MIN_PRIORITY);
                     decreaser.setPriority(Thread.MIN_PRIORITY);
                     increaser.start();
                     increaser.interrupt();

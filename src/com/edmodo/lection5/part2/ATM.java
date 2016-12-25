@@ -3,6 +3,7 @@ package com.edmodo.lection5.part2;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -237,40 +238,6 @@ class ATM implements Terminal {
         }
     }
 
-    void getMoneyByDecreaser() {
-        int sum;
-        for (int i = 0; i < acc.getAccount().size(); i++) {
-            for (int j = 0; j < acc.getAccount().get(i).getCardNumbersSize(); j++) {
-                sum = (int) (Math.random() * 5000) + 100;
-                String client = acc.getClientName(i);
-                String card = acc.getCardNumber(i, j);
-                if (acc.getAccount().get(i).getCardBalance(j) >= sum) {
-                    acc.setCardBalance(i, j, -sum);
-                    System.out.println("\u001b[34;m Снятие " + sum + " рублей c карты " + card + " клиента " +
-                            client + ".\n");
-                } else System.out.println("\u001b[34;m Снятие " + sum + " рублей c карты " + card + " клиента " +
-                        client + " невозможно.\n");
-            }
-        }
-    }
-
-    synchronized void getMoneyBySequentialDecreaser() {
-        int sum;
-        for (int i = 0; i < acc.getAccount().size(); i++) {
-            for (int j = 0; j < acc.getAccount().get(i).getCardNumbersSize(); j++) {
-                sum = (int) (Math.random() * 5000) + 100;
-                String client = acc.getClientName(i);
-                String card = acc.getCardNumber(i, j);
-                if (acc.getAccount().get(i).getCardBalance(j) >= sum) {
-                    acc.setCardBalance(i, j, -sum);
-                    System.out.println("\u001b[34;m Снятие " + sum + " рублей c карты " + card + " клиента " +
-                            client + ".\n");
-                } else System.out.println("\u001b[34;m Снятие " + sum + " рублей c карты " + card + " клиента " +
-                        client + " невозможно.\n");
-            }
-        }
-    }
-
     void addMoneyByIncreaser() {
         int sum;
         for (int i = 0; i < acc.getAccount().size(); i++) {
@@ -278,25 +245,141 @@ class ATM implements Terminal {
                 sum = (int) (Math.random() * 5000) + 100;
                 String client = acc.getClientName(i);
                 String card = acc.getCardNumber(i, j);
+                int balance;
                 acc.setCardBalance(i, j, sum);
+                balance = acc.getCardBalance(i, j);
                 System.out.println("\u001b[34;m Пополнение на " + sum + " рублей по карте " + card + " клиента " +
-                        client + ".\n");
+                        client + ". Баланс " + balance + "\n");
             }
         }
     }
 
-    synchronized void addMoneyBySequentialIncreaser() {
+    void getMoneyByDecreaser() {
         int sum;
         for (int i = 0; i < acc.getAccount().size(); i++) {
             for (int j = 0; j < acc.getAccount().get(i).getCardNumbersSize(); j++) {
                 sum = (int) (Math.random() * 5000) + 100;
                 String client = acc.getClientName(i);
                 String card = acc.getCardNumber(i, j);
-                acc.setCardBalance(i, j, sum);
-                System.out.println("\u001b[34;m Пополнение на " + sum + " рублей по карте " + card + " клиента " +
-                        client + ".\n");
+                int balance;
+                if (acc.getAccount().get(i).getCardBalance(j) >= sum) {
+                    acc.setCardBalance(i, j, -sum);
+                    balance = acc.getCardBalance(i, j);
+                    System.out.println("\u001b[34;m Снятие " + sum + " рублей c карты " + card + " клиента " +
+                            client + ". Баланс " + balance + "\n");
+                } else System.out.println("\u001b[34;m Снятие " + sum + " рублей c карты " + card + " клиента " +
+                        client + " невозможно.\n");
             }
         }
+    }
+
+  /*  synchronized void getMoneyBySequentialDecreaser() {
+        int sum;
+        for (int i = 0; i < acc.getAccount().size(); i++) {
+            for (int j = 0; j < acc.getAccount().get(i).getCardNumbersSize(); j++) {
+                try {
+                    deSerialAccount();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                sum = (int) (Math.random() * 5000) + 100;
+                String client = acc.getClientName(i);
+                String card = acc.getCardNumber(i, j);
+                int balance;
+                if (acc.getAccount().get(i).getCardBalance(j) >= sum) {
+                    acc.setCardBalance(i, j, -sum);
+                    balance = acc.getCardBalance(i, j);
+                    System.out.println("\u001b[34;m Снятие " + sum + " рублей c карты " + card + " клиента " +
+                            client + ". Баланс " + balance + "\n");
+                } else System.out.println("\u001b[34;m Снятие " + sum + " рублей c карты " + card + " клиента " +
+                        client + " невозможно.\n");
+                try {
+                    serialAccount();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }*/
+
+    void getMoneyBySequentialDecreaser() {
+        int sum;
+        for (int i = 0; i < acc.getAccount().size(); i++) {
+            for (int j = 0; j < acc.getAccount().get(i).getCardNumbersSize(); j++) {
+                try {
+                    deSerialAccount();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                sum = -((int) (Math.random() * 5000) + 100);
+                if (acc.getAccount().get(i).getCardBalance(j) >= sum) {
+                    changeBalanceByRunnable(i, j, sum);
+                }
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    void addMoneyBySequentialIncreaser() {
+        int sum;
+        for (int i = 0; i < acc.getAccount().size(); i++) {
+            for (int j = 0; j < acc.getAccount().get(i).getCardNumbersSize(); j++) {
+                try {
+                    deSerialAccount();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                sum = (int) (Math.random() * 5000) + 100;
+                changeBalanceByRunnable(i, j, sum);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private synchronized void changeBalanceByRunnable(int clientIndex, int cardIndex, int sum) {
+        String client = acc.getClientName(clientIndex);
+        String card = acc.getCardNumber(clientIndex, cardIndex);
+        acc.setCardBalance(clientIndex, cardIndex, sum);
+        showTransaction(client, card, sum, acc.getCardBalance(clientIndex, cardIndex));
+        try {
+            serialAccount();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private synchronized void showTransaction(String client, String card, int sum, int balance) {
+        System.out.println("\u001b[34;m Операция на " + sum + " рублей по карте " + card + " клиента " +
+                client + ". Баланс сейчас " + balance + " руб.\n");
+    }
+
+    void showAddMoney(String client, String card, int sum, int balance) {
+        System.out.println("\u001b[34;m Пополнение на " + sum + " рублей по карте " + card + " клиента " +
+                client + ". Баланс " + balance + "\n");
+    }
+
+    void showGetMoney(String client, String card, int sum, int balance) {
+        System.out.println("\u001b[34;m Снятие " + sum + " рублей c карты " + card + " клиента " +
+                client + ". Баланс " + balance + "\n");
     }
 
     @Override
@@ -379,7 +462,7 @@ class ATM implements Terminal {
         }
     }
 
-    void serialAccount() throws IOException {
+    synchronized void serialAccount() throws IOException {
         System.out.println("\u001b[32;m Сохранение.........");
         ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("C://Users/Public/serialAccount.txt"));
         out.writeObject(acc.getAccount());
@@ -387,11 +470,11 @@ class ATM implements Terminal {
         System.out.println("\u001b[34;m Данные записаны!\n");
     }
 
-    ATM deSerialAccount() throws IOException, ClassNotFoundException {
+    synchronized ATM deSerialAccount() throws IOException, ClassNotFoundException {
         ATM dataATM = new ATM();
         System.out.println("\u001b[32;m Данные считываются.........");
         ObjectInputStream in = new ObjectInputStream(new FileInputStream("C://Users/Public/serialAccount.txt"));
-        acc.setAccount((ArrayList<Client>) in.readObject());
+        acc.setAccount((List<Client>) in.readObject());
         in.close();
         System.out.println("\u001b[34;m Данные считаны!\n");
         return dataATM;
