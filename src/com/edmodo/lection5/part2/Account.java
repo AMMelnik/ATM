@@ -10,17 +10,13 @@ import java.util.regex.Pattern;
  */
 class Account implements Serializable {
 
-    //private List<Client> account;
     private ArrayList<Client> account;
 
-  /*  Account() {
-        account = Collections.synchronizedList(new ArrayList<>());
-    }*/
      Account() {
          account = new ArrayList<>();
     }
 
-    List<Client> getAccount() {
+    ArrayList<Client> getAccount() {
         return account;
     }
 
@@ -127,8 +123,8 @@ class Account implements Serializable {
         return getAccount().get(clientIndex).getCardBalance(cardIndex);
     }
 
-    void setCardBalance(int clientIndex, int cardIndex, int balance) {
-        getAccount().get(clientIndex).setCardBalance(cardIndex, getCardBalance(clientIndex, cardIndex) + balance);
+    void setCardBalance(int clientIndex, int cardIndex, int sum) {
+        getAccount().get(clientIndex).setCardBalance(cardIndex, getCardBalance(clientIndex, cardIndex) + sum);
     }
 
     int getCardsSize(int clientIndex) {

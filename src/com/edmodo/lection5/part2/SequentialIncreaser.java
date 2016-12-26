@@ -1,16 +1,15 @@
 package com.edmodo.lection5.part2;
 
-import java.io.IOException;
 
 /**
  * Created by pc on 24.12.2016.
  */
-class SecventialIncreaser implements Runnable {
+class SequentialIncreaser implements Runnable {
 
     private ATM atmAddMoney = new ATM();
     private int cyclesNum;
 
-    SecventialIncreaser(ATM atm, int cyclesNum) {
+    SequentialIncreaser(ATM atm, int cyclesNum) {
         atmAddMoney = atm;
         this.cyclesNum = cyclesNum;
     }

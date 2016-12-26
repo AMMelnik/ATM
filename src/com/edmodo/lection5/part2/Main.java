@@ -38,24 +38,31 @@ class Main {
                     atm.authorization();
                     break;
                 case "3":
-                    Increaser increaser = new Increaser();
-                    Decreaser decreaser = new Decreaser();
+                    int numT = (int) (Math.random() * 10) + 1;
+                    Increaser increaser = new Increaser(atm, numT);
+                    Decreaser decreaser = new Decreaser(atm, numT);
+                    // зависимость от приоритета
                     increaser.setPriority(Thread.MAX_PRIORITY);
+                    increaser.setName("Нить Increaser");
+                    // зависимость от приоритета
                     decreaser.setPriority(Thread.MIN_PRIORITY);
+                    decreaser.setName("Нить Decreaser");
                     increaser.start();
                     increaser.interrupt();
                     decreaser.start();
                     decreaser.interrupt();
                     break;
                 case "4":
-                    int num = (int) (Math.random() * 5) + 1;
-                    SecventialIncreaser secventialIncreaser = new SecventialIncreaser(atm, num);
-                    SequentialDecreaser sequentialDecreaser = new SequentialDecreaser(atm, num);
-                    Thread sIThred = new Thread(secventialIncreaser);
+                    int numR = (int) (Math.random() * 5) + 1;
+                    SequentialIncreaser sequentialIncreaser = new SequentialIncreaser(atm, numR);
+                    SequentialDecreaser sequentialDecreaser = new SequentialDecreaser(atm, numR);
+                    Thread sIThred = new Thread(sequentialIncreaser);
+                    sIThred.setName("Нить Sequential_Increaser");
                     // независимость от приоритета
                     sIThred.setPriority(Thread.MAX_PRIORITY);
                     sIThred.start();
                     Thread sDThread = new Thread(sequentialDecreaser);
+                    sDThread.setName("Нить Sequential_Decreaser");
                     // независимость от приоритета
                     sDThread.setPriority(Thread.MIN_PRIORITY);
                     sDThread.start();

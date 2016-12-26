@@ -3,7 +3,6 @@ package com.edmodo.lection5.part2;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -243,13 +242,7 @@ class ATM implements Terminal {
         for (int i = 0; i < acc.getAccount().size(); i++) {
             for (int j = 0; j < acc.getAccount().get(i).getCardNumbersSize(); j++) {
                 sum = (int) (Math.random() * 5000) + 100;
-                String client = acc.getClientName(i);
-                String card = acc.getCardNumber(i, j);
-                int balance;
-                acc.setCardBalance(i, j, sum);
-                balance = acc.getCardBalance(i, j);
-                System.out.println("\u001b[34;m Пополнение на " + sum + " рублей по карте " + card + " клиента " +
-                        client + ". Баланс " + balance + "\n");
+                changeBalanceByThread(i, j, sum, 0);
             }
         }
     }
@@ -258,19 +251,32 @@ class ATM implements Terminal {
         int sum;
         for (int i = 0; i < acc.getAccount().size(); i++) {
             for (int j = 0; j < acc.getAccount().get(i).getCardNumbersSize(); j++) {
-                sum = (int) (Math.random() * 5000) + 100;
-                String client = acc.getClientName(i);
-                String card = acc.getCardNumber(i, j);
-                int balance;
-                if (acc.getAccount().get(i).getCardBalance(j) >= sum) {
-                    acc.setCardBalance(i, j, -sum);
-                    balance = acc.getCardBalance(i, j);
-                    System.out.println("\u001b[34;m Снятие " + sum + " рублей c карты " + card + " клиента " +
-                            client + ". Баланс " + balance + "\n");
-                } else System.out.println("\u001b[34;m Снятие " + sum + " рублей c карты " + card + " клиента " +
-                        client + " невозможно.\n");
+                sum = -((int) (Math.random() * 5000) + 100);
+                if (acc.getAccount().get(i).getCardBalance(j) >= Math.abs(sum)) {
+                    changeBalanceByThread(i, j, sum, 1);
+                } else changeBalanceByThread(i, j, sum, 2);
             }
         }
+    }
+
+    private void changeBalanceByThread(int clientIndex, int cardIndex, int sum, int transactType) {
+        String client = acc.getClientName(clientIndex);
+        String card = acc.getCardNumber(clientIndex, cardIndex);
+        System.out.println("\u001b[32;m " + Thread.currentThread().getName());
+        if (transactType < 2) {
+            acc.setCardBalance(clientIndex, cardIndex, sum);
+            showTransactionByThread(client, card, sum, acc.getCardBalance(clientIndex, cardIndex));
+        }
+        if (transactType == 2) {
+            System.out.println("\u001b[34;m Невозможно выполнить:");
+            showTransactionByThread(client, card, sum, acc.getCardBalance(clientIndex, cardIndex));
+        }
+    }
+
+
+    private void showTransactionByThread(String client, String card, int sum, int balance) {
+        System.out.println("\u001b[34;m Операция на " + sum + " рублей по карте " + card + " клиента " +
+                client + ". Баланс сейчас " + balance + " руб.\n");
     }
 
     void getMoneyBySequentialDecreaser() {
@@ -299,6 +305,7 @@ class ATM implements Terminal {
         synchronized (this) {
             String client = acc.getClientName(clientIndex);
             String card = acc.getCardNumber(clientIndex, cardIndex);
+            System.out.println("\u001b[32;m " + Thread.currentThread().getName());
             showTransactionType(transactType);
             if (transactType < 2) {
                 acc.setCardBalance(clientIndex, cardIndex, sum);
@@ -332,16 +339,6 @@ class ATM implements Terminal {
     private synchronized void showTransactionInfo(String client, String card, int sum, int balance) {
         System.out.println("\u001b[34;m Операция на " + sum + " рублей по карте " + card + " клиента " +
                 client + ". Баланс сейчас " + balance + " руб.\n");
-    }
-
-    void showAddMoney(String client, String card, int sum, int balance) {
-        System.out.println("\u001b[34;m Пополнение на " + sum + " рублей по карте " + card + " клиента " +
-                client + ". Баланс " + balance + "\n");
-    }
-
-    void showGetMoney(String client, String card, int sum, int balance) {
-        System.out.println("\u001b[34;m Снятие " + sum + " рублей c карты " + card + " клиента " +
-                client + ". Баланс " + balance + "\n");
     }
 
     @Override

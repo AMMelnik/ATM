@@ -1,6 +1,5 @@
 package com.edmodo.lection5.part2;
 
-import java.io.IOException;
 
 /**
  * Created by pc on 24.12.2016.

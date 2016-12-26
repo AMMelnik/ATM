@@ -2,8 +2,6 @@ package com.edmodo.lection5.part2;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by pc on 28.11.2016.
