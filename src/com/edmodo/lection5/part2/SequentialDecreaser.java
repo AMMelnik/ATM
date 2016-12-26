@@ -6,6 +6,7 @@ import java.io.IOException;
  * Created by pc on 24.12.2016.
  */
 class SequentialDecreaser implements Runnable {
+
     private ATM atmGetMoney = new ATM();
     private int cyclesNum;
 

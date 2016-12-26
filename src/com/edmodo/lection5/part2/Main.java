@@ -52,13 +52,13 @@ class Main {
                     SecventialIncreaser secventialIncreaser = new SecventialIncreaser(atm, num);
                     SequentialDecreaser sequentialDecreaser = new SequentialDecreaser(atm, num);
                     Thread sIThred = new Thread(secventialIncreaser);
+                    // независимость от приоритета
                     sIThred.setPriority(Thread.MAX_PRIORITY);
                     sIThred.start();
-                  //  sIThred.interrupt();
                     Thread sDThread = new Thread(sequentialDecreaser);
+                    // независимость от приоритета
                     sDThread.setPriority(Thread.MIN_PRIORITY);
                     sDThread.start();
-                 //   sDThread.interrupt();
                     break;
                 case "5":
                     try {
