@@ -313,22 +313,15 @@ class ATM implements Terminal {
         int sum;
         for (int i = 0; i < acc.getAccount().size(); i++) {
             for (int j = 0; j < acc.getAccount().get(i).getCardNumbersSize(); j++) {
-                try {
-                    deSerialAccount();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
                 sum = -((int) (Math.random() * 5000) + 100);
                 if (acc.getAccount().get(i).getCardBalance(j) >= sum) {
                     changeBalanceByRunnable(i, j, sum);
                 }
-                try {
+               /* try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }
+                }*/
             }
         }
     }
@@ -337,34 +330,29 @@ class ATM implements Terminal {
         int sum;
         for (int i = 0; i < acc.getAccount().size(); i++) {
             for (int j = 0; j < acc.getAccount().get(i).getCardNumbersSize(); j++) {
-                try {
-                    deSerialAccount();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
                 sum = (int) (Math.random() * 5000) + 100;
                 changeBalanceByRunnable(i, j, sum);
-                try {
+              /*  try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }
+                }*/
             }
         }
     }
 
     private synchronized void changeBalanceByRunnable(int clientIndex, int cardIndex, int sum) {
-        String client = acc.getClientName(clientIndex);
-        String card = acc.getCardNumber(clientIndex, cardIndex);
-        acc.setCardBalance(clientIndex, cardIndex, sum);
-        showTransaction(client, card, sum, acc.getCardBalance(clientIndex, cardIndex));
-        try {
+        synchronized (this) {
+            String client = acc.getClientName(clientIndex);
+            String card = acc.getCardNumber(clientIndex, cardIndex);
+            acc.setCardBalance(clientIndex, cardIndex, sum);
+            showTransaction(client, card, sum, acc.getCardBalance(clientIndex, cardIndex));
+        }
+     /*   try {
             serialAccount();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     private synchronized void showTransaction(String client, String card, int sum, int balance) {
@@ -462,7 +450,7 @@ class ATM implements Terminal {
         }
     }
 
-    synchronized void serialAccount() throws IOException {
+    void serialAccount() throws IOException {
         System.out.println("\u001b[32;m Сохранение.........");
         ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("C://Users/Public/serialAccount.txt"));
         out.writeObject(acc.getAccount());
@@ -470,11 +458,11 @@ class ATM implements Terminal {
         System.out.println("\u001b[34;m Данные записаны!\n");
     }
 
-    synchronized ATM deSerialAccount() throws IOException, ClassNotFoundException {
+    ATM deSerialAccount() throws IOException, ClassNotFoundException {
         ATM dataATM = new ATM();
         System.out.println("\u001b[32;m Данные считываются.........");
         ObjectInputStream in = new ObjectInputStream(new FileInputStream("C://Users/Public/serialAccount.txt"));
-        acc.setAccount((List<Client>) in.readObject());
+        acc.setAccount((ArrayList<Client>) in.readObject());
         in.close();
         System.out.println("\u001b[34;m Данные считаны!\n");
         return dataATM;

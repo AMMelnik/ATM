@@ -10,17 +10,21 @@ import java.util.regex.Pattern;
  */
 class Account implements Serializable {
 
-    private List<Client> account;
+    //private List<Client> account;
+    private ArrayList<Client> account;
 
-    Account() {
+  /*  Account() {
         account = Collections.synchronizedList(new ArrayList<>());
+    }*/
+     Account() {
+         account = new ArrayList<>();
     }
 
     List<Client> getAccount() {
         return account;
     }
 
-    void setAccount(List<Client> account) {
+    void setAccount(ArrayList<Client> account) {
         this.account = account;
     }
 

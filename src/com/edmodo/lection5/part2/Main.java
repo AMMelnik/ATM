@@ -40,7 +40,7 @@ class Main {
                 case "3":
                     Increaser increaser = new Increaser();
                     Decreaser decreaser = new Decreaser();
-                    increaser.setPriority(Thread.MIN_PRIORITY);
+                    increaser.setPriority(Thread.MAX_PRIORITY);
                     decreaser.setPriority(Thread.MIN_PRIORITY);
                     increaser.start();
                     increaser.interrupt();
@@ -48,8 +48,8 @@ class Main {
                     decreaser.interrupt();
                     break;
                 case "4":
-                    SecventialIncreaser secventialIncreaser = new SecventialIncreaser();
-                    SequentialDecreaser sequentialDecreaser = new SequentialDecreaser();
+                    SecventialIncreaser secventialIncreaser = new SecventialIncreaser(atm);
+                    SequentialDecreaser sequentialDecreaser = new SequentialDecreaser(atm);
                     Thread sIThred = new Thread(secventialIncreaser);
                     sIThred.setPriority(Thread.NORM_PRIORITY);
                     sIThred.start();

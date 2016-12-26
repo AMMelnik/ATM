@@ -9,20 +9,17 @@ public class SecventialIncreaser implements Runnable {
 
     private ATM atmAddMoney = new ATM();
 
+    SecventialIncreaser(ATM atm) {
+        atmAddMoney = atm;
+    }
+
     @Override
     public void run() {
-        try {
-            atmAddMoney.deSerialAccount();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
         atmAddMoney.addMoneyBySequentialIncreaser();
-        try {
+    /*    try {
             atmAddMoney.serialAccount();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }

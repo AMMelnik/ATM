@@ -8,20 +8,17 @@ import java.io.IOException;
 public class SequentialDecreaser implements Runnable {
     private ATM atmGetMoney = new ATM();
 
+    SequentialDecreaser(ATM atm) {
+        atmGetMoney = atm;
+    }
+
     @Override
     public void run() {
-        try {
-            atmGetMoney.deSerialAccount();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
         atmGetMoney.getMoneyBySequentialDecreaser();
-        try {
+    /*    try {
             atmGetMoney.serialAccount();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }

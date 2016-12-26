@@ -12,8 +12,8 @@ class Client implements Serializable {
 
     private String login;
     private String pin;
-    private List<String> cardNumbers = Collections.synchronizedList(new ArrayList<>());
-    private List<Integer> cardBalance = Collections.synchronizedList(new ArrayList<>());
+    private ArrayList<String> cardNumbers = new ArrayList<>();
+    private ArrayList<Integer> cardBalance = new ArrayList<>();
 
     String getLogin() {
         return login;
@@ -35,7 +35,7 @@ class Client implements Serializable {
         return cardNumbers.get(index);
     }
 
-    List<String> getCardNumbers() {
+    ArrayList<String> getCardNumbers() {
         return cardNumbers;
     }
 
@@ -52,7 +52,7 @@ class Client implements Serializable {
         return cardBalance.get(index);
     }
 
-    List<Integer> getCardBalance() {
+    ArrayList<Integer> getCardBalance() {
         return cardBalance;
     }
 
