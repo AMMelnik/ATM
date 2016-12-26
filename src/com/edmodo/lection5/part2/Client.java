@@ -2,6 +2,8 @@ package com.edmodo.lection5.part2;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by pc on 28.11.2016.
@@ -10,8 +12,8 @@ class Client implements Serializable {
 
     private String login;
     private String pin;
-    private ArrayList<String> cardNumbers = new ArrayList<>();
-    private ArrayList<Integer> cardBalance = new ArrayList<>();
+    private List<String> cardNumbers = Collections.synchronizedList(new ArrayList<>());
+    private List<Integer> cardBalance = Collections.synchronizedList(new ArrayList<>());
 
     String getLogin() {
         return login;
@@ -33,7 +35,7 @@ class Client implements Serializable {
         return cardNumbers.get(index);
     }
 
-    ArrayList<String> getCardNumbers() {
+    List<String> getCardNumbers() {
         return cardNumbers;
     }
 
@@ -50,7 +52,7 @@ class Client implements Serializable {
         return cardBalance.get(index);
     }
 
-    ArrayList<Integer> getCardBalance() {
+    List<Integer> getCardBalance() {
         return cardBalance;
     }
 

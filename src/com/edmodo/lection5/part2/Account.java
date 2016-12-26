@@ -1,8 +1,7 @@
 package com.edmodo.lection5.part2;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,17 +10,17 @@ import java.util.regex.Pattern;
  */
 class Account implements Serializable {
 
-    private ArrayList<Client> account;
+    private List<Client> account;
 
     Account() {
-        account = new ArrayList<>();
+        account = Collections.synchronizedList(new ArrayList<>());
     }
 
-    ArrayList<Client> getAccount() {
+    List<Client> getAccount() {
         return account;
     }
 
-    void setAccount(ArrayList<Client> account) {
+    void setAccount(List<Client> account) {
         this.account = account;
     }
 
@@ -106,6 +105,10 @@ class Account implements Serializable {
             }
         }
         return -1;
+    }
+
+    String getCardNumber(int clientIndex, int cardIndex) {
+        return getAccount().get(clientIndex).getCardNumber(cardIndex);
     }
 
     void setCardNumber(String number, int clientIndex) {
