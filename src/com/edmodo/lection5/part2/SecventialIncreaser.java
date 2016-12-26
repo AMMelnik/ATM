@@ -5,21 +5,20 @@ import java.io.IOException;
 /**
  * Created by pc on 24.12.2016.
  */
-public class SecventialIncreaser implements Runnable {
+class SecventialIncreaser implements Runnable {
 
     private ATM atmAddMoney = new ATM();
+    private int cyclesNum;
 
-    SecventialIncreaser(ATM atm) {
+    SecventialIncreaser(ATM atm, int cyclesNum) {
         atmAddMoney = atm;
+        this.cyclesNum = cyclesNum;
     }
 
     @Override
     public void run() {
-        atmAddMoney.addMoneyBySequentialIncreaser();
-    /*    try {
-            atmAddMoney.serialAccount();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+        for (int i = 0; i < cyclesNum; i++) {
+            atmAddMoney.addMoneyBySequentialIncreaser();
+        }
     }
 }

@@ -48,14 +48,17 @@ class Main {
                     decreaser.interrupt();
                     break;
                 case "4":
-                    SecventialIncreaser secventialIncreaser = new SecventialIncreaser(atm);
-                    SequentialDecreaser sequentialDecreaser = new SequentialDecreaser(atm);
+                    int num = (int) (Math.random() * 5) + 1;
+                    SecventialIncreaser secventialIncreaser = new SecventialIncreaser(atm, num);
+                    SequentialDecreaser sequentialDecreaser = new SequentialDecreaser(atm, num);
                     Thread sIThred = new Thread(secventialIncreaser);
-                    sIThred.setPriority(Thread.NORM_PRIORITY);
+                    sIThred.setPriority(Thread.MAX_PRIORITY);
                     sIThred.start();
+                  //  sIThred.interrupt();
                     Thread sDThread = new Thread(sequentialDecreaser);
-                    sDThread.setPriority(Thread.NORM_PRIORITY);
+                    sDThread.setPriority(Thread.MIN_PRIORITY);
                     sDThread.start();
+                 //   sDThread.interrupt();
                     break;
                 case "5":
                     try {

@@ -273,55 +273,14 @@ class ATM implements Terminal {
         }
     }
 
-  /*  synchronized void getMoneyBySequentialDecreaser() {
-        int sum;
-        for (int i = 0; i < acc.getAccount().size(); i++) {
-            for (int j = 0; j < acc.getAccount().get(i).getCardNumbersSize(); j++) {
-                try {
-                    deSerialAccount();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-                sum = (int) (Math.random() * 5000) + 100;
-                String client = acc.getClientName(i);
-                String card = acc.getCardNumber(i, j);
-                int balance;
-                if (acc.getAccount().get(i).getCardBalance(j) >= sum) {
-                    acc.setCardBalance(i, j, -sum);
-                    balance = acc.getCardBalance(i, j);
-                    System.out.println("\u001b[34;m Снятие " + sum + " рублей c карты " + card + " клиента " +
-                            client + ". Баланс " + balance + "\n");
-                } else System.out.println("\u001b[34;m Снятие " + sum + " рублей c карты " + card + " клиента " +
-                        client + " невозможно.\n");
-                try {
-                    serialAccount();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }*/
-
     void getMoneyBySequentialDecreaser() {
         int sum;
         for (int i = 0; i < acc.getAccount().size(); i++) {
             for (int j = 0; j < acc.getAccount().get(i).getCardNumbersSize(); j++) {
                 sum = -((int) (Math.random() * 5000) + 100);
-                if (acc.getAccount().get(i).getCardBalance(j) >= sum) {
-                    changeBalanceByRunnable(i, j, sum);
-                }
-               /* try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }*/
+                if (acc.getAccount().get(i).getCardBalance(j) >= Math.abs(sum)) {
+                    changeBalanceByRunnable(i, j, sum, 1);
+                } else changeBalanceByRunnable(i, j, sum, 2);
             }
         }
     }
@@ -331,31 +290,46 @@ class ATM implements Terminal {
         for (int i = 0; i < acc.getAccount().size(); i++) {
             for (int j = 0; j < acc.getAccount().get(i).getCardNumbersSize(); j++) {
                 sum = (int) (Math.random() * 5000) + 100;
-                changeBalanceByRunnable(i, j, sum);
-              /*  try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }*/
+                changeBalanceByRunnable(i, j, sum, 0);
             }
         }
     }
 
-    private synchronized void changeBalanceByRunnable(int clientIndex, int cardIndex, int sum) {
+    private synchronized void changeBalanceByRunnable(int clientIndex, int cardIndex, int sum, int transactType) {
         synchronized (this) {
             String client = acc.getClientName(clientIndex);
             String card = acc.getCardNumber(clientIndex, cardIndex);
-            acc.setCardBalance(clientIndex, cardIndex, sum);
-            showTransaction(client, card, sum, acc.getCardBalance(clientIndex, cardIndex));
+            showTransactionType(transactType);
+            if (transactType < 2) {
+                acc.setCardBalance(clientIndex, cardIndex, sum);
+                showTransactionInfo(client, card, sum, acc.getCardBalance(clientIndex, cardIndex));
+            }
+            if (transactType == 2) {
+                System.out.println("\u001b[34;m Невозможно выполнить:");
+                showTransactionInfo(client, card, sum, acc.getCardBalance(clientIndex, cardIndex));
+            }
+            notify();
+            try {
+                wait(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-     /*   try {
-            serialAccount();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
     }
 
-    private synchronized void showTransaction(String client, String card, int sum, int balance) {
+    private synchronized void showTransactionType(int value) {
+        if (value == 0) {
+            System.out.println("\u001b[30;m Пополнение...\n");
+        }
+        if (value == 1) {
+            System.out.println("\u001b[31;m Снятие...\n");
+        }
+        if (value == 2) {
+            System.out.println("\u001b[31;m Попытка снятия...\n");
+        }
+    }
+
+    private synchronized void showTransactionInfo(String client, String card, int sum, int balance) {
         System.out.println("\u001b[34;m Операция на " + sum + " рублей по карте " + card + " клиента " +
                 client + ". Баланс сейчас " + balance + " руб.\n");
     }
