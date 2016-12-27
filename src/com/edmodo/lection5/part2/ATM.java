@@ -10,7 +10,7 @@ import java.util.Scanner;
  */
 class ATM implements Terminal {
     private int loginIndex;
-    private Account acc = new Account();
+    Account acc = new Account();
 
     void authorization() {
         loginIndex = acc.checkValidLogin(acc.enterLogin());
