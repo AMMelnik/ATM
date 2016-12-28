@@ -15,6 +15,13 @@ class SynchronizedAccount {
         safeAccount = atm.acc;
     }
 
+    synchronized int getClientsSize() {
+        return safeAccount.getAccount().size();
+    }
+
+    synchronized int getCardsSize(int clientIndex) {
+        return safeAccount.getCardsSize(clientIndex);
+    }
 
     synchronized int getBalance(int clientIndex, int cardIndex) {
         balanse = safeAccount.getCardBalance(clientIndex, cardIndex);
@@ -34,16 +41,16 @@ class SynchronizedAccount {
     synchronized void withdraw(int clientIndex, int cardIndex, int amount) {
         if (getBalance(clientIndex, cardIndex) > amount) {
             safeAccount.setCardBalance(clientIndex, cardIndex, balanse - amount);
-            System.out.println("\u001b[34;m Снятие средств в размере" + amount + " руб.\n");
+            System.out.println("\u001b[34;m Снятие средств в размере " + amount + " руб.\n");
         } else {
-            System.out.println("\u001b[31;m Снятие средств в размере" + amount +
+            System.out.println("\u001b[31;m Снятие средств в размере " + amount +
                     " руб. нельзя совершить из-за недостатка средств на счете!\n");
         }
     }
 
     synchronized void refill(int clientIndex, int cardIndex, int amount) {
         safeAccount.setCardBalance(clientIndex, cardIndex, balanse + amount);
-        System.out.println("\u001b[34;m Пополнение средств в размере" + amount + " руб.\n");
+        System.out.println("\u001b[34;m Пополнение средств в размере " + amount + " руб.\n");
     }
 
     synchronized void showClientInfo(int clientIndex, int cardIndex) {
