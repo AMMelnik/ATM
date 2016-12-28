@@ -2,6 +2,10 @@ package com.edmodo.lection5.part2;
 
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by pc on 28.11.2016.
@@ -79,8 +83,17 @@ class Main {
                         } catch (Exception e) {
                             System.out.println("\u001b[31;m Пожалуйста, введите целое положительное число!\n");
                         }
+                     /*   ExecutorService executorService = Executors.newFixedThreadPool(threadNum);
+                        executorService.submit(new BalanceTask(atm));
+                        executorService.shutdown();*/
+
                         for (int i = 1; i <= threadNum; i++) {
                             Thread t = new Thread(new BalanceTask(atm));
+                            t.setName("Поток " + i);
+                        }
+                        for (int i = 1; i <= threadNum; i++) {
+                            BalanceTask balanceTask = new BalanceTask(atm);
+                            Thread t = new Thread(balanceTask);
                             t.setName("Поток " + i);
                             t.start();
                         }
