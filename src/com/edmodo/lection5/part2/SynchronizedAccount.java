@@ -7,7 +7,7 @@ package com.edmodo.lection5.part2;
 class SynchronizedAccount {
 
     private Account safeAccount = new Account();
-    private final Object accountLock = new Object();
+    // private final Object accountLock = new Object();
     private int balance;
 
     SynchronizedAccount(ATM atm) {
@@ -34,42 +34,36 @@ class SynchronizedAccount {
         return safeAccount.getCardNumber(clientIndex, cardIndex);
     }
 
-    private void withdraw(int clientIndex, int cardIndex, int amount) {
-        synchronized (accountLock) {
-            if (balance >= amount) {
-                safeAccount.setCardBalance(clientIndex, cardIndex, -amount);
-                System.out.println("\u001b[34;m Снятие средств в размере " + amount + " руб.\n");
-            } else {
-                System.out.println("\u001b[31;m Снятие средств в размере " + amount +
-                        " руб. нельзя совершить из-за недостатка средств на счете!\n");
-            }
-            getBalance(clientIndex, cardIndex);
+    private synchronized void withdraw(int clientIndex, int cardIndex, int amount) {
+        if (balance >= amount) {
+            safeAccount.setCardBalance(clientIndex, cardIndex, -amount);
+            System.out.println("\u001b[34;m Снятие средств в размере " + amount + " руб.\n");
+        } else {
+            System.out.println("\u001b[31;m Снятие средств в размере " + amount +
+                    " руб. нельзя совершить из-за недостатка средств на счете!\n");
         }
+        getBalance(clientIndex, cardIndex);
+
     }
 
     private synchronized void refill(int clientIndex, int cardIndex, int amount) {
-        synchronized (accountLock) {
-            safeAccount.setCardBalance(clientIndex, cardIndex, amount);
-            System.out.println("\u001b[34;m Пополнение средств в размере " + amount + " руб.\n");
-            getBalance(clientIndex, cardIndex);
-        }
+        safeAccount.setCardBalance(clientIndex, cardIndex, amount);
+        System.out.println("\u001b[34;m Пополнение средств в размере " + amount + " руб.\n");
+        getBalance(clientIndex, cardIndex);
     }
 
-    private String showClientInfo(int clientIndex, int cardIndex) {
-        synchronized (accountLock) {
-            return "\u001b[34;m Информация по клиенту:\n Логин: " + getClientName(clientIndex) +
-                    "\n Карта: " + getClientCard(clientIndex, cardIndex) + "\n Баланс: " +
-                    balance + " \n";
-        }
+    private synchronized String showClientInfo(int clientIndex, int cardIndex) {
+        return "\u001b[34;m Информация по клиенту:\n Логин: " + getClientName(clientIndex) +
+                "\n Карта: " + getClientCard(clientIndex, cardIndex) + "\n Баланс: " +
+                balance + " \n";
+
     }
 
-    private void showBalanceInfo(int clientIndex, int cardIndex) {
-        synchronized (accountLock) {
-            System.out.println("\u001b[34;m Баланс: " + getBalance(clientIndex, cardIndex) + " \n");
-        }
+    private synchronized void showBalanceInfo(int clientIndex, int cardIndex) {
+        System.out.println("\u001b[34;m Баланс: " + getBalance(clientIndex, cardIndex) + " \n");
     }
 
-    void safeThreadWork() {
+    synchronized void safeThreadWork() {
         int sum, transactType;
         for (int i = 0; i < getClientsSize(); i++) {
             for (int j = 0; j < getCardsSize(i); j++) {
@@ -93,7 +87,6 @@ class SynchronizedAccount {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-
                 }
             }
         }

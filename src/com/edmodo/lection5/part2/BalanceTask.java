@@ -14,7 +14,6 @@ class BalanceTask implements Runnable {
 
     @Override
     public void run() {
-
         syncAcc.safeThreadWork();
     }
 }

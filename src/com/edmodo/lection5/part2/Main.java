@@ -87,10 +87,10 @@ class Main {
                         executorService.submit(new BalanceTask(atm));
                         executorService.shutdown();*/
 
-                        for (int i = 1; i <= threadNum; i++) {
+                     /*   for (int i = 1; i <= threadNum; i++) {
                             Thread t = new Thread(new BalanceTask(atm));
                             t.setName("Поток " + i);
-                        }
+                        }*/
                         for (int i = 1; i <= threadNum; i++) {
                             BalanceTask balanceTask = new BalanceTask(atm);
                             Thread t = new Thread(balanceTask);
